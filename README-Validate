@@ -1,0 +1,25 @@
+
+Login to kube-master and run the following to validate:
+$ sudo kubectl run nginx --image=nginx --port 80
+$ sudo kubectl expose deploy nginx --port 80 --target-port 80 --type NodePort
+$ sudo kubectl get services
+
+# Example output
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP   10.96.0.1        <none>        443/TCP        19m
+nginx        NodePort    10.105.161.158   <none>        80:30942/TCP   19s
+
+From the output above, retrieve the external port (30942) that nginx is running on, then hit:
+  http://kube-node1_ip:nginx_port
+  http://kube-node2_ip:nginx_port
+  http://kube-node3_ip:nginx_port
+
+If you can't hit the webpages due to Corp network (ie. Palo Alto) restrictions, verify by curling from the kube-master:
+$ curl http://CLUSTER-IP:80
+
+Delete the service with:
+$ sudo kubectl delete service nginx
+
+Then delete the deployment:
+$ sudo kubectl delete deployment nginx
+

@@ -1,0 +1,25 @@
+---
+# This playbook deploys a simple kubeadm install.
+- name: Common Tasks
+  hosts: all
+  become: true
+  become_method: sudo
+  gather_facts: False
+  roles:
+    - common
+
+- name: Install Kubernetes master
+  hosts: master
+  become: true
+  become_method: sudo
+  gather_facts: False
+  roles:
+    - master
+
+- name: Install Kubernetes workers
+  hosts: workers
+  become: true
+  become_method: sudo
+  gather_facts: False
+  roles:
+    - workers
